@@ -1,12 +1,12 @@
 const router = require("express").Router();
 const {
-    install,
+    installBot,
     authProcess
 } = require('../controllers/oauth');
 
 // ROUTES
 router
-    .get("/install", install)
+    .get("/install", installBot)
     .get("/auth", authProcess);
 
 module.exports = router;

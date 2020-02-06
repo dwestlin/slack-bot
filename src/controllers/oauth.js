@@ -2,7 +2,7 @@ const qs = require("querystring");
 const axios = require('axios');
 require("dotenv").config();
 
-module.exports.install = async function (req, res) {
+const installBot = async function (req, res) {
   try {
     let url = `https://slack.com/oauth/v2/authorize?client_id=${process.env.SLACK_CLIENT_ID}&team=${process.env.SLACK_TEAM}&redirect_url=${process.env.SLACK_redirectUrl}&scope=${process.env.SLACK_scopes}`;
 
@@ -15,7 +15,7 @@ module.exports.install = async function (req, res) {
 
 };
 
-module.exports.authProcess = async (req, res) => {
+const authProcess = async (req, res) => {
   try {
     if (!req.query.code) {
       return res.status(401).end();
@@ -47,4 +47,6 @@ module.exports.authProcess = async (req, res) => {
     console.log("ERROR:", error);
     res.status(500).end();
   }
-};
+}
+
+module.exports = { installBot, authProcess }

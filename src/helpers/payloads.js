@@ -1,4 +1,3 @@
-
 const getUsersMessage = data =>{
     return {
         username : data.username,
@@ -24,7 +23,6 @@ const getUsersMessage = data =>{
             ]
     }
 }
-
 
 const weatherMessage = weather => {
     return {
