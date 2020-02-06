@@ -1,11 +1,11 @@
-const router = require("express").Router();
+const router = require("express").Router()
 const {
     eventsCommand,
     infoCommand,
     userCommand,
     jokeCommand,
     weatherCommand
-} = require("../controllers/commands");
+} = require("../controllers/commands")
 
 // ROUTES for recieving command requests from Slack's API.
 router
@@ -13,6 +13,6 @@ router
     .post("/info", infoCommand)
     .post("/users", userCommand)
     .post("/jokes", jokeCommand)
-    .post("/weather", weatherCommand);
+    .post("/weather", weatherCommand)
 
-module.exports = router;
+module.exports = router

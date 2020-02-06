@@ -1,12 +1,12 @@
-const router = require("express").Router();
+const router = require("express").Router()
 const {
     installBot,
     authProcess
-} = require('../controllers/oauth');
+} = require('../controllers/oauth')
 
 // ROUTES
 router
     .get("/install", installBot)
-    .get("/auth", authProcess);
+    .get("/auth", authProcess)
 
-module.exports = router;
+module.exports = router

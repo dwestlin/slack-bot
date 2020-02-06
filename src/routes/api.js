@@ -1,7 +1,7 @@
-const router = require("express").Router();
-const oauthRoutes = require("./oauth");
-const commandRoutes = require("./commands");
-const eventRoutes = require("./events");
+const router = require("express").Router()
+const oauthRoutes = require("./oauth")
+const commandRoutes = require("./commands")
+const eventRoutes = require("./events")
 
 // ROUTES
 router
@@ -10,4 +10,4 @@ router
     .use("/oauth", oauthRoutes)
 
 
-module.exports = router;
+module.exports = router
