@@ -103,5 +103,4 @@ const appMentionMessage = (req, res) => {
         res.status(500).end()
     }
 }
-
 module.exports = {appMentionMessage, sendMessage, welcomeMessage}

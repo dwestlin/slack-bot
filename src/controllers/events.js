@@ -12,7 +12,6 @@ module.exports.eventHandler = async (req, res) => {
     }
 
     switch (req.body.event.type) {
-
       case "app_mention": 
         appMentionMessage(req, res)
         res.status(200).end()
@@ -31,7 +30,7 @@ module.exports.eventHandler = async (req, res) => {
         welcomeMessage(req, res)
         res.status(200).end()
         break
-
+        
       default:
         return res.status(204).end()
     }  
