@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const installBot = async function (req, res) {
   try {
-    let url = `https://slack.com/oauth/v2/authorize?client_id=${process.env.SLACK_CLIENT_ID}&team=${process.env.SLACK_TEAM}&redirect_url=${process.env.SLACK_redirectUrl}&scope=${process.env.SLACK_scopes}`;
+    let url = `https://slack.com/oauth/v2/authorize?client_id=${process.env.SLACK_CLIENT_ID}&team=${process.env.SLACK_TEAM}&redirect_url=${process.env.SLACK_REDIRECT_URL}&scope=${process.env.SLACK_scopes}`;
 
   
     res.status(302).redirect(url);
