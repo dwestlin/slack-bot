@@ -1,12 +1,13 @@
-const {
-    weatherMessage,
-    welcomeMessage,
-    getUsersMessage
-} = require("../helpers/payloads")
+const { weatherMessage, welcomeMessage, getUsersMessage } = require("../helpers/payloads")
+const { validateRequest } = require('../helpers/validateRequest')
 const axios = require("axios")
 
 const eventsCommand = async (req, res) => {
     try {
+        if (!validateRequest(req, res)) {
+            return res.status(501).end();
+        }  
+
         res.status(200).send("EVENTS")
     } catch (error) {
         console.log("ERROR:", error)
@@ -15,9 +16,12 @@ const eventsCommand = async (req, res) => {
 
 const weatherCommand = async (req, res) => {
     try {
+        if (!validateRequest(req, res)) {
+            return res.status(501).end();
+        }  
+
         let city = req.body.text
         let weather = await getWeather(city)
-
         let url = req.body.response_url
         let header = {
             headers: {
@@ -47,8 +51,11 @@ const weatherCommand = async (req, res) => {
 
 const jokeCommand = async (req, res) => {
     try {
-        let joke = await getRandomJoke()
+        if (!validateRequest(req, res)) {
+            return res.status(501).end();
+        }  
 
+        let joke = await getRandomJoke()
         let url = req.body.response_url
         let header = {
             headers: {
@@ -71,6 +78,10 @@ const jokeCommand = async (req, res) => {
 
 const infoCommand = async (req, res) => {
     try {
+        if (!validateRequest(req, res)) {
+            return res.status(501).end();
+        }  
+
         let url = req.body.response_url
         let header = {
             headers: {
@@ -92,6 +103,10 @@ const infoCommand = async (req, res) => {
 
 const userCommand = async (req, res) => {
     try {
+        if (!validateRequest(req, res)) {
+            return res.status(501).end();
+        }  
+        
         let url = req.body.response_url
         let header = {
             headers: {

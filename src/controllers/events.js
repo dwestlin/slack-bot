@@ -1,8 +1,5 @@
-const {
-    appMentionMessage,
-    sendMessage,
-    welcomeMessage
-} = require('./messages')
+const { appMentionMessage, sendMessage, welcomeMessage } = require('./messages')
+const { validateRequest } = require('../helpers/validateRequest')
 
 
 module.exports.eventHandler = async (req, res) => {
@@ -10,6 +7,9 @@ module.exports.eventHandler = async (req, res) => {
         if (req.body.type === 'url_verification') {
             return res.status(200).send(req.body.challenge)
         }
+        if (!validateRequest(req, res)) {
+            return res.status(501).end();
+        }  
 
         switch (req.body.event.type) {
             case "app_mention":

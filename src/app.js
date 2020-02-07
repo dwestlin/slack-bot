@@ -5,7 +5,6 @@ const app = express()
 const bodyParser = require("body-parser")
 const { rawBodySaver } = require('./helpers/rawBodySaver')
 const apiRoutes = require("./routes/api")
-const { validateRequest } = require('./helpers/validateRequest')
 
 // MIDDLEWARES
 app.use(bodyParser.json({
@@ -16,8 +15,6 @@ app.use(bodyParser.urlencoded({
     extended: true
 }))
 
-// VALIDATES THAT REQUEST COMES FROM SLACK'S API
-app.use(validateRequest)
 
 // ROUTES
 app.get("/", (req, res) => {
