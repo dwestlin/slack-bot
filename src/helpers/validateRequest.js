@@ -26,16 +26,15 @@ const validateRequest = (req, res, next) => {
       };
       // replace direct compare with the hmac result
       if (!validSignature()) {
-        res.status(401).end();
-        return false;
+        return res.status(401).end();
       }
+      res.status(200).end();
       next();
-      return true;
     }
+    res.status(401).end();
   } catch (error) {
     res.status(401).json({
       status: "Failed",
-      statusCode: 401,
       message: "You don't have authorization to request that url."
     });
     return false;

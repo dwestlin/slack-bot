@@ -3,14 +3,13 @@ const {
   welcomeMessage,
   getUsersMessage
 } = require("../helpers/payloads");
-const { validateRequest } = require("../helpers/validateRequest");
 const axios = require("axios");
 
-const eventsCommand = async (req, res) => {
+const eventsCommand = (req, res) => {
   try {
-    if (!validateRequest(req, res)) {
-      return res.status(501).end();
-    }
+    // if (!validateRequest(req, res)) {
+    //   return res.status(501).end();
+    // }
 
     res.status(200).send("EVENTS");
   } catch (error) {
@@ -20,10 +19,6 @@ const eventsCommand = async (req, res) => {
 
 const weatherCommand = async (req, res) => {
   try {
-    if (!validateRequest(req, res)) {
-      return res.status(501).end();
-    }
-
     let city = req.body.text;
     let weather = await getWeather(city);
     let url = req.body.response_url;
@@ -55,10 +50,6 @@ const weatherCommand = async (req, res) => {
 
 const jokeCommand = async (req, res) => {
   try {
-    if (!validateRequest(req, res)) {
-      return res.status(501).end();
-    }
-
     let joke = await getRandomJoke();
     let url = req.body.response_url;
     let header = {
@@ -72,7 +63,7 @@ const jokeCommand = async (req, res) => {
       text: `_${joke.data.value.joke}_`
     };
 
-    axios.post(url, payload, header).then(res => {
+    axios.post(url, payload, header).then(result => {
       return res.status(200).end();
     });
   } catch (error) {
@@ -83,10 +74,6 @@ const jokeCommand = async (req, res) => {
 
 const infoCommand = async (req, res) => {
   try {
-    if (!validateRequest(req, res)) {
-      return res.status(501).end();
-    }
-
     let url = req.body.response_url;
     let header = {
       headers: {
@@ -98,7 +85,7 @@ const infoCommand = async (req, res) => {
       channel: req.body.channel_id
     });
 
-    axios.post(url, payload, header).then(res => {
+    axios.post(url, payload, header).then(result => {
       return res.status(200).end();
     });
   } catch (error) {
@@ -109,10 +96,6 @@ const infoCommand = async (req, res) => {
 
 const userCommand = async (req, res) => {
   try {
-    if (!validateRequest(req, res)) {
-      return res.status(501).end();
-    }
-
     let url = req.body.response_url;
     let header = {
       headers: {

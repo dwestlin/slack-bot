@@ -16,7 +16,7 @@ const interactiveHandler = (req, res) => {
       replace_original: false
     };
 
-    axios.post(payload.response_url, message, header).then(res => {
+    axios.post(payload.response_url, message, header).then(result => {
       return res.status(200).end();
     });
   } catch (error) {
