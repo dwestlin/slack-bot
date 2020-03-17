@@ -7,10 +7,7 @@ const axios = require("axios");
 
 const eventsCommand = (req, res) => {
   try {
-    // if (!validateRequest(req, res)) {
-    //   return res.status(501).end();
-    // }
-
+    //TODO Implement event command.
     res.status(200).send("EVENTS");
   } catch (error) {
     console.log("ERROR:", error);
