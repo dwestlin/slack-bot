@@ -7,6 +7,7 @@ const {
   weatherCommand
 } = require("../controllers/commands");
 
+// Custom middleware that ensures and verifies that incoming request comes from slack.
 const { validateRequest } = require("../helpers/validateRequest");
 
 // ROUTES for recieving command requests from Slack's API.

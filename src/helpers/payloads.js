@@ -1,3 +1,9 @@
+/**
+ *
+ * CUSTOM MESSAGES THAT BOT SENDS IN SLACK.
+ *
+ */
+
 const getUsersMessage = data => {
   return {
     username: data.username,

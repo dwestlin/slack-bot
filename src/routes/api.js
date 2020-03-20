@@ -3,7 +3,7 @@ const oauthRoutes = require("./oauth");
 const commandRoutes = require("./commands");
 const eventRoutes = require("./events");
 
-// ROUTES
+// DECLARING ROUTES
 router
   .use("/commands", commandRoutes)
   .use("/events", eventRoutes)

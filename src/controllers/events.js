@@ -4,7 +4,8 @@ const {
   welcomeMessage
 } = require("./messages");
 
-module.exports.eventHandler = async (req, res) => {
+// Handles the incoming events based on type of message.
+const eventHandler = async (req, res) => {
   try {
     if (req.body.type === "url_verification") {
       return res.status(200).send(req.body.challenge);
@@ -35,3 +36,5 @@ module.exports.eventHandler = async (req, res) => {
     res.status(500).end();
   }
 };
+
+module.exports = { eventHandler };

@@ -1,9 +1,14 @@
 const axios = require("axios");
-
+/**
+ *
+ * Function that is supposed to handles all the interactive messages.
+ * TODO: Implement interactive cases at SLACK API.
+ *
+ */
 const interactiveHandler = (req, res) => {
   try {
     let payload = JSON.parse(req.body.payload);
-    //TODO initialize database and retrieve information based on userid.
+
     let header = {
       headers: {
         "Content-type": "application/json"

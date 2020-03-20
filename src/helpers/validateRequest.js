@@ -1,7 +1,7 @@
 require("dotenv").config();
-
 const crypto = require("crypto");
 
+// Middleware that verifies the request comes from slack.
 const validateRequest = (req, res, next) => {
   try {
     if (process.env.SLACK_CLIENT_SIGNING_SECRET && req.rawBody) {

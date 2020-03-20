@@ -1,9 +1,10 @@
+require("dotenv").config();
 const qs = require("querystring");
 const axios = require("axios");
-require("dotenv").config();
 
 const url = "https://slack.com/api/oauth.v2.access";
 
+// redirecting to slack website from /install route.
 const installBot = async function(req, res) {
   try {
     let redirectUrl = `https://slack.com/oauth/v2/authorize?client_id=${process.env.SLACK_CLIENT_ID}&redirect_url=${process.env.SLACK_REDIRECT_URL}&scope=${process.env.SLACK_scopes}`;
@@ -15,9 +16,11 @@ const installBot = async function(req, res) {
   }
 };
 
+// function that handles the auth process.
 const authProcess = async (req, res) => {
   try {
     if (!req.query.code) {
+      //no code, no access!
       return res.status(401).end();
     }
 
@@ -34,9 +37,11 @@ const authProcess = async (req, res) => {
       code: code
     });
 
+    //posting the client_id, client_secret and auth code to slack api.
     axios
       .post(url, data, headers)
       .then(result => {
+        // When authed, redirect back to the slack workspace
         return res
           .status(302)
           .redirect(`http://${result.data.team.name}.slack.com`);

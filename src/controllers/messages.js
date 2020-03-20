@@ -3,6 +3,12 @@ const payloads = require("../helpers/payloads");
 const qs = require("querystring");
 const apiUrl = "https://slack.com/api";
 
+/**
+ *
+ * Functions that handles all the messages that are posted to slack api.
+ *
+ */
+
 const sendMessage = (req, res) => {
   try {
     let message = `<@${req.body.event.user}>, skickade ett meddelande :thumbsup:`;

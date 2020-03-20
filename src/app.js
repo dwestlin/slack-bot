@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const { rawBodySaver } = require("./helpers/rawBodySaver");
 const apiRoutes = require("./routes/api");
 
-// MIDDLEWARES
+//Using the bodyParsers verify callback to exporting a raw body. You need that to verify the signature comes from SLACK.
 app.use(
   bodyParser.json({
     verify: rawBodySaver
@@ -21,11 +21,12 @@ app.use(
 
 // ROUTES
 app.get("/", (req, res) => {
-  res.status(200).send("Welcome to the IBM slackbot. This is just an API.");
+  res.status(200).send("Welcome to the simple slackbot. This is just an API.");
 });
 
 app.use("/api", apiRoutes);
 
+// If no routes is used, this middleware kicks in and send a error message.
 app.all("*", (req, res, next) => {
   res.status(404).json({
     status: "fail",
