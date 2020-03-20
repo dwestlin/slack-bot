@@ -14,3 +14,14 @@ The bot should be able to handle following events
 ---
 
 .The project is intended to be developed in javascript in general and nodejs in particular and the application will use an express server with a developed REST API in the backend that receives and handles requests sent by slack api.
+
+## Run
+[Node.js](http://nodejs.org/) is required.
+
+```shell
+$ git clone https://github.com/dwestlin/slack-bot.git
+$ cd slack-bot
+$ npm install
+$ create .env based on .env.sample file.
+$ npm start
+```
