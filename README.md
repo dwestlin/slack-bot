@@ -13,4 +13,4 @@ The bot should be able to handle following events
 
 ---
 
-The project is intended to be developed in javascript in general and nodejs in particular and the application will use an express server with a developed REST API in the backend that receives and handles requests sent by slack api.
+.The project is intended to be developed in javascript in general and nodejs in particular and the application will use an express server with a developed REST API in the backend that receives and handles requests sent by slack api.
