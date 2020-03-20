@@ -4,9 +4,9 @@ require("dotenv").config();
 
 const url = "https://slack.com/api/oauth.v2.access";
 
-const installBot = async function (req, res) {
+const installBot = async function(req, res) {
   try {
-    let redirectUrl = `https://slack.com/oauth/v2/authorize?client_id=${process.env.SLACK_CLIENT_ID}&team=${process.env.SLACK_TEAM}&redirect_url=${process.env.SLACK_REDIRECT_URL}&scope=${process.env.SLACK_scopes}`;
+    let redirectUrl = `https://slack.com/oauth/v2/authorize?client_id=${process.env.SLACK_CLIENT_ID}&redirect_url=${process.env.SLACK_REDIRECT_URL}&scope=${process.env.SLACK_scopes}`;
 
     res.status(302).redirect(redirectUrl);
   } catch (error) {
@@ -49,6 +49,5 @@ const authProcess = async (req, res) => {
     res.status(500).end();
   }
 };
-
 
 module.exports = { installBot, authProcess };
