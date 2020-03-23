@@ -32,7 +32,6 @@ const validateRequest = (req, res, next) => {
       if (!validSignature()) {
         return res.status(401).end();
       }
-      res.status(200).end();
       next();
     } else {
       res.status(401).end();
