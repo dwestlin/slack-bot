@@ -60,9 +60,7 @@ const jokeCommand = async (req, res) => {
       text: `_${joke.data.value.joke}_`
     };
 
-    axios.post(url, payload, header).then(result => {
-      return res.status(200).end();
-    });
+    axios.post(url, payload, header);
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
