@@ -53,10 +53,14 @@ const welcomeMessage = (req, res) => {
       }
     };
 
+
+
     axios
       .post(`${apiUrl}/im.open`, data, header)
       .then(result => {
         let message = payloads.welcomeMessage();
+
+        console.log(result);
 
         message.channel = result.data.channel.id;
 
