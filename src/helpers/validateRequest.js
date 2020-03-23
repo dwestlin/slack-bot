@@ -4,6 +4,10 @@ const crypto = require("crypto");
 // Middleware that verifies the request comes from slack.
 const validateRequest = (req, res, next) => {
   try {
+    if (req.body.type === "url_verification") {
+      return res.status(200).send(req.body.challenge);
+    }
+
     if (process.env.SLACK_CLIENT_SIGNING_SECRET && req.rawBody) {
       let timestamp = req.header("X-Slack-Request-Timestamp");
       let body = req.rawBody;
@@ -28,7 +32,6 @@ const validateRequest = (req, res, next) => {
       if (!validSignature()) {
         return res.status(401).end();
       }
-      res.status(200).end();
       next();
     }
     res.status(401).end();

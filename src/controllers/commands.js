@@ -8,7 +8,7 @@ const axios = require("axios");
 const eventsCommand = (req, res) => {
   try {
     //TODO Implement event command.
-    res.status(200).send("EVENTS");
+    res.send("EVENTS");
   } catch (error) {
     console.log("ERROR:", error);
   }
@@ -77,6 +77,7 @@ const infoCommand = async (req, res) => {
         "Content-Type": "application/json"
       }
     };
+
     let payload = welcomeMessage({
       username: req.body.user_id,
       channel: req.body.channel_id

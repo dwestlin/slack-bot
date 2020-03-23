@@ -43,7 +43,7 @@ const sendMessage = (req, res) => {
 const welcomeMessage = (req, res) => {
   try {
     let data = qs.stringify({
-      user: req.body.event.user,
+      user: req.body.event.user.id,
       token: process.env.SLACK_BOT_TOKEN
     });
 
@@ -53,14 +53,10 @@ const welcomeMessage = (req, res) => {
       }
     };
 
-
-
     axios
       .post(`${apiUrl}/im.open`, data, header)
       .then(result => {
         let message = payloads.welcomeMessage();
-
-        console.log(result);
 
         message.channel = result.data.channel.id;
 
