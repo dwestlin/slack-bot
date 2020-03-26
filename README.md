@@ -19,7 +19,9 @@ The bot has the following features:
 The bot should also be able to handle following events.
 
 - [ ] Users should be able to add brief information about themselves (eg by typing `/addinfo "hello my name is John Doe"`).
-- [ ] The bot should send a message every Thursday regarding the coffee meeting.
+- [ ] Storing above info in database. (follow up question: where should we store that info? does IBM have internal database hosting alternative?)
+- [ ] The bot should send a message every Thursday reminding about the coffee meeting.
+- [ ] Host the bot (where? should it be containerized?)
 
 ---
 
