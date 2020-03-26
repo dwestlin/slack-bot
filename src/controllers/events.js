@@ -7,10 +7,6 @@ const {
 // Handles the incoming events based on type of message.
 const eventHandler = async (req, res) => {
   try {
-    if (req.body.type === "url_verification") {
-      return res.status(200).send(req.body.challenge);
-    }
-
     switch (req.body.event.type) {
       case "app_mention":
         appMentionMessage(req, res);
