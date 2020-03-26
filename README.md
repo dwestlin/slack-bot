@@ -25,6 +25,10 @@ The bot should also be able to handle following events.
 
 ---
 
+## Prerequisites
+
+Create a bot user at https://api.slack.com/
+
 ## Installation
 
 [Node.js](http://nodejs.org/) is required.
@@ -33,7 +37,7 @@ The bot should also be able to handle following events.
 $ git clone https://github.com/dwestlin/slack-bot.git
 $ cd slack-bot
 $ npm install
-$ create .env file based on the .env.sample
+$ create .env file based on the .env.sample credentials.
 ```
 
 ## Run
