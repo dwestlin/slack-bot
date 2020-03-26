@@ -8,7 +8,7 @@ const axios = require("axios");
 const eventsCommand = (req, res) => {
   try {
     //TODO Implement event command.
-    res.send("EVENTS");
+    res.status(200).send("EVENTS");
   } catch (error) {
     console.log("ERROR:", error);
   }
@@ -60,7 +60,9 @@ const jokeCommand = async (req, res) => {
       text: `_${joke.data.value.joke}_`
     };
 
-    axios.post(url, payload, header);
+    axios.post(url, payload, header).then(result => {
+      return res.status(200).end();
+    })
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
