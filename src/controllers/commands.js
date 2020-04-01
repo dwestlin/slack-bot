@@ -62,7 +62,7 @@ const jokeCommand = async (req, res) => {
 
     axios.post(url, payload, header).then(result => {
       return res.status(200).end();
-    })
+    });
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
@@ -89,6 +89,15 @@ const infoCommand = async (req, res) => {
   } catch (error) {
     console.log("ERROR: ", error);
     return res.status(500).end();
+  }
+};
+
+const addInfoCommand = (req, res) => {
+  try {
+    console.log(req.body);
+    res.status(200).end();
+  } catch (error) {
+    res.status(500).end();
   }
 };
 
@@ -144,5 +153,6 @@ module.exports = {
   eventsCommand,
   weatherCommand,
   infoCommand,
-  jokeCommand
+  jokeCommand,
+  addInfoCommand
 };

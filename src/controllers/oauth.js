@@ -5,7 +5,7 @@ const axios = require("axios");
 const url = "https://slack.com/api/oauth.v2.access";
 
 // redirecting to slack website from /install route.
-const installBot = async function(req, res) {
+const installBot = (req, res) => {
   try {
     let redirectUrl = `https://slack.com/oauth/v2/authorize?client_id=${process.env.SLACK_CLIENT_ID}&redirect_url=${process.env.SLACK_REDIRECT_URL}&scope=${process.env.SLACK_scopes}`;
 

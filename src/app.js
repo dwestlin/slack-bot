@@ -6,6 +6,8 @@ const bodyParser = require("body-parser");
 const { rawBodySaver } = require("./helpers/rawBodySaver");
 const apiRoutes = require("./routes/api");
 
+require("./database/db");
+
 //Using the bodyParsers verify callback to exporting a raw body. You need that to verify the signature comes from SLACK.
 app.use(
   bodyParser.json({
