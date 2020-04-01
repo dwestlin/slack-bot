@@ -4,6 +4,7 @@ const {
   getUsersMessage
 } = require("../helpers/payloads");
 const axios = require("axios");
+let User = require("../models/User");
 
 const eventsCommand = (req, res) => {
   try {
@@ -94,8 +95,20 @@ const infoCommand = async (req, res) => {
 
 const addInfoCommand = (req, res) => {
   try {
-    console.log(req.body);
-    res.status(200).end();
+    User.findById(req.body.user_id).then((err, result) => {
+      if (!result) {
+        let user = new User({
+          _id: req.body.user_id,
+          name: req.body.user_name,
+          bio: req.body.text
+        });
+
+        user.save().then(usr => res.status(200).json(usr));
+      } else {
+        result.text = req.body.text;
+        result.save().then(usr => res.status(200).json(usr));
+      }
+    });
   } catch (error) {
     res.status(500).end();
   }
