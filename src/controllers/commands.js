@@ -93,22 +93,25 @@ const infoCommand = async (req, res) => {
   }
 };
 
-const addInfoCommand = (req, res) => {
+const addInfoCommand = async (req, res) => {
   try {
-    User.findById(req.body.user_id).then((err, result) => {
-      if (!result) {
-        let user = new User({
-          _id: req.body.user_id,
-          name: req.body.user_name,
-          bio: req.body.text
-        });
 
-        user.save().then(usr => res.status(200).json(usr));
-      } else {
-        result.text = req.body.text;
-        result.save().then(usr => res.status(200).json(usr));
-      }
-    });
+    let data = await User.findById(req.body.user_id);
+
+    if (!data) {
+      let user = new User({
+        _id: req.body.user_id,
+        name: req.body.user_name,
+        bio: req.body.text
+      });
+
+      return user.save().then(usr => res.status(200).json(usr));
+    }
+
+    data.bio = req.body.text;
+
+    data.save().then(result => res.status(200).send(result)).catch(err => res.status(500).send(err));
+
   } catch (error) {
     res.status(500).end();
   }
