@@ -31,6 +31,27 @@ const getUsersMessage = data => {
   };
 };
 
+const getUserInfo = data => {
+  return {
+    text: data.text,
+    replace_original: false,
+    blocks: [
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text: `Information: ${data.text}`
+        },
+        accessory: {
+          type: "image",
+          image_url: data.imageUrl,
+          alt_text: "picture"
+        }
+      }
+    ]
+  };
+};
+
 const weatherMessage = weather => {
   return {
     username: weather.username,
@@ -130,4 +151,4 @@ const welcomeMessage = data => {
   };
 };
 
-module.exports = { welcomeMessage, weatherMessage, getUsersMessage };
+module.exports = { welcomeMessage, getUserInfo, weatherMessage, getUsersMessage };

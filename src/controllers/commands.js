@@ -95,22 +95,24 @@ const infoCommand = async (req, res) => {
 
 const addInfoCommand = async (req, res) => {
   try {
-
     let data = await User.findById(req.body.user_id);
 
     if (!data) {
+      let imageUrl = await getUserInfo(req.body.user_id);
+
       let user = new User({
         _id: req.body.user_id,
         name: req.body.user_name,
-        bio: req.body.text
+        bio: req.body.text,
+        image: imageUrl.data.user.profile.image_32
       });
 
-      return user.save().then(usr => res.status(200).json(usr));
+      return user.save().then(usr => res.status(200).send("Informationen om dig är inlagd"));
     }
 
     data.bio = req.body.text;
 
-    data.save().then(result => res.status(200).send(result)).catch(err => res.status(500).send(err));
+    data.save().then(result => res.status(200).send("Information om dig är uppdaterad")).catch(err => res.status(500).send(err));
 
   } catch (error) {
     res.status(500).end();
@@ -158,6 +160,17 @@ async function getWeather(city) {
   let header = {
     headers: {
       "Content-Type": "application/json"
+    }
+  };
+
+  return axios.get(url, header);
+}
+
+async function getUserInfo(id) {
+  let url = `https://slack.com/api/users.info?token=${process.env.SLACK_BOT_TOKEN}&user=${id}&pretty=1`;
+  let header = {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
     }
   };
 

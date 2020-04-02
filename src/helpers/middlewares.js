@@ -1,12 +1,24 @@
 require("dotenv").config();
 const crypto = require("crypto");
 
+// Callback function that exports  a parsed rawBody into the request.
+// This function is needed in order to verify requests from Slack's API.
+const rawBodySaver = (req, res, buf, encoding) => {
+  if (buf && buf.length) {
+    req.rawBody = buf.toString(encoding || "utf8");
+  }
+};
+
+const bodyChallenge = (req, res, next) => {
+  if (req.body.type === "url_verification") {
+    res.status(200).send(req.body.challenge);
+    next();
+  }
+}
+
 // Middleware that verifies the request comes from slack.
 const validateRequest = (req, res, next) => {
   try {
-    if (req.body.type === "url_verification") {
-      return res.status(200).send(req.body.challenge);
-    }
 
     if (process.env.SLACK_CLIENT_SIGNING_SECRET && req.rawBody) {
       let timestamp = req.header("X-Slack-Request-Timestamp");
@@ -45,4 +57,22 @@ const validateRequest = (req, res, next) => {
   }
 };
 
-module.exports = { validateRequest };
+const notFound = (req, res, next) => {
+  res.status(404);
+
+  const error = new Error(`Did not found ${req.originalUrl}`);
+
+  next(error);
+};
+
+const errorHandler = (err, req, res, next) => {
+
+  const code = res.statusCode !== 200 ? res.statusCode : 500;
+  res.status(code);
+  res.json({
+    message: err.message,
+    stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
+  });
+};
+
+module.exports = { rawBodySaver, validateRequest, notFound, errorHandler, bodyChallenge };

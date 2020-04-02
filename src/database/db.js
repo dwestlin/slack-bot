@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 
-require("dotenv").config();
 const server = process.env.DB_SERVER;
-const name = process.env.DB_NAME;
 
 class Database {
   constructor() {

@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const {
   eventsCommand,
   infoCommand,
@@ -9,7 +10,7 @@ const {
 } = require("../controllers/commands");
 
 // Custom middleware that ensures and verifies that incoming request comes from slack.
-const { validateRequest } = require("../helpers/validateRequest");
+const { validateRequest } = require("../helpers/middlewares");
 
 // ROUTES for recieving command requests from Slack's API.
 router
