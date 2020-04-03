@@ -13,15 +13,14 @@ The bot has the following features:
 - [x] Get current weather in the specified city.
 - [x] Tells random jokes.
 - [x] Listens to messages adressed to the bot.
+- [x] Able to add brief information about all employees (eg by typing `/addinfo "hello my name is John/Jane Doe"`)
+- [x] Storing above info in mongodb-database.
 
 ## Requirements
 
 The bot should also be able to handle following events.
-
-- [ ] Users should be able to add brief information about themselves (eg by typing `/addinfo "hello my name is John Doe"`).
-- [ ] Storing above info in database. (follow up question: where should we store that info? does IBM have internal database hosting alternative?)
 - [ ] The bot should send a message every Thursday reminding about the coffee meeting.
-- [ ] Host the bot (where? should it be containerized?)
+- [ ] Host the bot (where? should it be containerized?). At this point it's hosted in Dockerfile at a raspberry pi.
 
 ---
 
