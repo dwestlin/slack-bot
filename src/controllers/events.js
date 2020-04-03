@@ -10,13 +10,12 @@ const eventHandler = async (req, res) => {
     switch (req.body.event.type) {
       case "app_mention":
         appMentionMessage(req, res);
-        res.status(200).end();
         break;
       case "message":
         // It doesn't need to handle a message if the bot is typing.
         if (!req.body.event.bot_profile && !req.body.event.bot_id) {
           sendMessage(req, res);
-          res.status(200).end();
+          break;
         }
         res.status(204).end();
         break;

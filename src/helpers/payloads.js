@@ -40,7 +40,7 @@ const getUserInfo = data => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `Information: ${data.text}`
+          text: `${data.name} \n - ${data.text}`
         },
         accessory: {
           type: "image",
@@ -122,6 +122,14 @@ const welcomeMessage = data => {
           type: "mrkdwn",
           text:
             "*:four: Använd `/weather <stad>` * Ger dig information om vädret samt temperatur."
+        }
+      },
+      {
+        type: "section",
+        text: {
+          type: "mrkdwn",
+          text:
+            "*:five: Använd `/addinfo <kort information om dig själv>` * För att presentera dig för nya användare."
         }
       },
       {
