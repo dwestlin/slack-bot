@@ -1,10 +1,11 @@
 const {
   weatherMessage,
   welcomeMessage,
-  getUsersMessage
+  getUsersMessage, modal
 } = require("../helpers/payloads");
 const axios = require("axios");
 let User = require("../models/User");
+const { postRequestAPI } = require('../helpers/api');
 
 const eventsCommand = (req, res) => {
   try {
@@ -81,6 +82,16 @@ const infoCommand = async (req, res) => {
   }
 };
 
+const addInfo = async (req, res) => {
+  const { trigger_id } = req.body;
+
+  let view = modal({
+    trigger_id
+  })
+  res.status(200).end();
+  let result = await postRequestAPI('views.open', view);
+}
+
 const addInfoCommand = async (req, res) => {
   try {
     if (req.body.text) {
@@ -88,13 +99,15 @@ const addInfoCommand = async (req, res) => {
 
       if (!data) {
 
-        let imageUrl = await getRequest(`https://slack.com/api/users.info?token=${process.env.SLACK_BOT_TOKEN}&user=${req.body.user_id}&pretty=1`);
+        let result = await postRequestAPI('users.info', {
+          user: req.body.user_id
+        });
 
         let user = new User({
           _id: req.body.user_id,
           name: req.body.user_name,
           bio: req.body.text,
-          image: imageUrl.data.user.profile.image_32
+          image: result.user.profile.image_32
         });
 
         return user.save().then(usr => res.status(200).send("Informationen om dig är inlagd"));
@@ -139,5 +152,6 @@ module.exports = {
   weatherCommand,
   infoCommand,
   jokeCommand,
-  addInfoCommand
+  addInfoCommand,
+  addInfo
 };

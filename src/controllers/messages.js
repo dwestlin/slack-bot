@@ -1,7 +1,5 @@
-const axios = require("axios");
 const payloads = require("../helpers/payloads");
-const qs = require("querystring");
-const apiUrl = "https://slack.com/api";
+const { postRequestAPI } = require('../helpers/api');
 
 /**
  *
@@ -9,84 +7,51 @@ const apiUrl = "https://slack.com/api";
  *
  */
 
-const sendMessage = (req, res) => {
+const sendMessage = async (req, res) => {
   try {
     let message = `<@${req.body.event.user}>, skickade ett meddelande :thumbsup:`;
 
-    let data = qs.stringify({
+    let result = await postRequestAPI("chat.postEphemeral", {
       user: req.body.event.user,
-      token: process.env.SLACK_BOT_TOKEN,
       channel: req.body.event.channel,
       text: message
     });
 
-    axios
-      .post(`${apiUrl}/chat.postEphemeral`, data)
-      .then(result => {
-        return res.status(200).end();
-      })
-      .catch(error => {
-        console.log("ERROR: ", error);
-        res.status(500).end();
-      });
+    res.status(200).end();
   } catch (error) {
     res.status(500).end();
   }
 };
 
-const welcomeMessage = (req, res) => {
+const welcomeMessage = async (req, res) => {
   try {
-    let data = qs.stringify({
-      user: req.body.event.user.id,
-      token: process.env.SLACK_BOT_TOKEN
+
+    let channel = await postRequestAPI('im.open', {
+      user: req.body.event.user.id
+    })
+
+    let message = payloads.welcomeMessage({
+      channel: channel.channel.id
     });
 
-    axios
-      .post(`${apiUrl}/im.open`, data)
-      .then(result => {
-        let message = payloads.welcomeMessage();
+    let result = await postRequestAPI('chat.postMessage', message);
+    res.status(200);
 
-        message.channel = result.data.channel.id;
-
-        return axios.post(`${apiUrl}/chat.postMessage`, message, {
-          headers: {
-            Authorization: "Bearer " + process.env.SLACK_BOT_TOKEN
-          }
-        });
-      })
-      .then(result => {
-        res.status(200).end();
-      })
-      .catch(error => {
-        console.log("ERROR:", error);
-        res.status(500).end();
-      });
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
   }
 };
 
-const appMentionMessage = (req, res) => {
+const appMentionMessage = async (req, res) => {
   try {
-    let message = `Hej <@${req.body.event.user}>, du pingade mig :tada: Skriv /info för mer information om vad jag kan göra.`;
-
-    let data = qs.stringify({
-      token: process.env.SLACK_BOT_TOKEN,
+    let result = await postRequestAPI("chat.postEphemeral", {
+      user: req.body.event.user,
       channel: req.body.event.channel,
-      text: message,
-      user: req.body.event.user
+      text: `Hej <@${req.body.event.user}>, du pingade mig :tada: Skriv /info för mer information om vad jag kan göra.`
     });
 
-    axios
-      .post(`${apiUrl}/chat.postEphemeral`, data)
-      .then(result => {
-        res.status(200).end();
-      })
-      .catch(err => {
-        console.log("ERROR: ", err);
-        res.status(500).end();
-      });
+    res.status(200).end();
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();

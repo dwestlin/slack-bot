@@ -159,4 +159,47 @@ const welcomeMessage = data => {
   };
 };
 
-module.exports = { welcomeMessage, getUserInfo, weatherMessage, getUsersMessage };
+const modal = context => {
+  return {
+    trigger_id: context.trigger_id,
+    view: JSON.stringify({
+      type: 'modal',
+      title: {
+        type: 'plain_text',
+        text: 'IBM'
+      },
+      callback_id: 'addinfo',
+      submit: {
+        type: 'plain_text',
+        text: 'Submit',
+        emoji: true
+      },
+      close: {
+        type: "plain_text",
+        text: "Cancel",
+        emoji: true
+      },
+      blocks: [
+        {
+          type: "input",
+          element: {
+            type: "plain_text_input",
+            action_id: "bio_input",
+            multiline: true,
+            placeholder: {
+              type: "plain_text",
+              text: "Add some information about yourself..."
+            }
+          },
+          label: {
+            type: "plain_text",
+            text: "Biography"
+          }
+        }
+      ]
+    })
+  }
+
+};
+
+module.exports = { modal, welcomeMessage, getUserInfo, weatherMessage, getUsersMessage };

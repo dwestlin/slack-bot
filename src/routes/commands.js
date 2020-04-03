@@ -6,7 +6,7 @@ const {
   userCommand,
   jokeCommand,
   weatherCommand,
-  addInfoCommand
+  addInfoCommand, addInfo
 } = require("../controllers/commands");
 
 // Custom middleware that ensures and verifies that incoming request comes from slack.
@@ -19,6 +19,6 @@ router
   .post("/users", validateRequest, userCommand)
   .post("/jokes", validateRequest, jokeCommand)
   .post("/weather", validateRequest, weatherCommand)
-  .post("/addInfo", validateRequest, addInfoCommand);
+  .post("/addInfo", validateRequest, addInfo);
 
 module.exports = router;
