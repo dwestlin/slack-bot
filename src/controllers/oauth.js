@@ -23,22 +23,15 @@ const authProcess = async (req, res) => {
       return res.status(401).end();
     }
 
-    let code = req.query.code;
-    let headers = {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      }
-    };
-
     let data = qs.stringify({
       client_id: process.env.SLACK_CLIENT_ID,
       client_secret: process.env.SLACK_CLIENT_SECRET,
-      code: code
+      code: req.query.code
     });
 
     //posting the client_id, client_secret and auth code to slack api.
     axios
-      .post(url, data, headers)
+      .post(url, data)
       .then(result => {
         // When authed, redirect back to the slack workspace
         return res
