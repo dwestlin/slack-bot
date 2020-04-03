@@ -18,7 +18,9 @@ const eventsCommand = (req, res) => {
 const weatherCommand = async (req, res) => {
   try {
     let city = req.body.text;
-    let weather = await getWeather(city);
+    let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.WEATHER_API_KEY}`;
+
+    let weather = await getRequest(weatherUrl);
     let url = req.body.response_url;
 
     // Storing the data to be sent to webhook url.
@@ -85,7 +87,8 @@ const addInfoCommand = async (req, res) => {
       let data = await User.findById(req.body.user_id);
 
       if (!data) {
-        let imageUrl = await getUserInfo(req.body.user_id);
+
+        let imageUrl = await getRequest(`https://slack.com/api/users.info?token=${process.env.SLACK_BOT_TOKEN}&user=${req.body.user_id}&pretty=1`);
 
         let user = new User({
           _id: req.body.user_id,
@@ -125,25 +128,6 @@ const userCommand = async (req, res) => {
     res.status(500).end();
   }
 };
-
-async function getRandomJoke() {
-  let url = "http://api.icndb.com/jokes/random";
-
-  return axios.get(url);
-}
-
-async function getWeather(city) {
-  //
-  let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.WEATHER_API_KEY}`;
-
-  return axios.get(url);
-}
-
-async function getUserInfo(id) {
-  let url = `https://slack.com/api/users.info?token=${process.env.SLACK_BOT_TOKEN}&user=${id}&pretty=1`;
-
-  return axios.get(url);
-}
 
 async function getRequest(url) {
   return axios.get(url);
