@@ -1,9 +1,7 @@
-
 const axios = require("axios");
 
 const { postRequestAPI, getRequest } = require('../helpers/api');
 const { weatherMessage, welcomeMessage, getUsersMessage, openModal } = require("../helpers/payloads");
-
 
 const commandHandler = (req, res) => {
   let type = req.params.command;
@@ -41,6 +39,53 @@ const getEvents = (req, res) => {
   }
 };
 
+const getInfo = async (req, res) => {
+  try {
+    let { response_url } = req.body;
+
+    let payload = welcomeMessage();
+
+    axios.post(response_url, payload).then(result => {
+      return res.status(200).end();
+    });
+  } catch (error) {
+    console.log("ERROR: ", error);
+    return res.status(500).end();
+  }
+};
+
+const getUsers = async (req, res) => {
+  try {
+    let { response_url, user_id, channel_id, text } = req.body;
+    let payload = getUsersMessage({ user_id, channel_id, text });
+
+    axios.post(response_url, payload).then(result => res.status(200).end());
+  } catch (error) {
+    console.log("ERROR:", error);
+    res.status(500).end();
+  }
+};
+
+const getJoke = async (req, res) => {
+  try {
+    let joke = await getRequest("http://api.icndb.com/jokes/random");
+    let { response_url, user_id } = req.body;
+
+    let payload = {
+      username: user_id,
+      response_type: "in_channel",
+      text: `_${joke.data.value.joke}_`
+    };
+
+    axios.post(response_url, payload).then(result => {
+      return res.status(200).end();
+    });
+  } catch (error) {
+    console.log("ERROR:", error);
+    res.status(500).end();
+  }
+};
+
 const getWeather = async (req, res) => {
   try {
     let city = req.body.text;
@@ -67,41 +112,6 @@ const getWeather = async (req, res) => {
   }
 };
 
-const getJoke = async (req, res) => {
-  try {
-    let joke = await getRequest("http://api.icndb.com/jokes/random");
-    let { response_url, user_id } = req.body;
-
-    let payload = {
-      username: user_id,
-      response_type: "in_channel",
-      text: `_${joke.data.value.joke}_`
-    };
-
-    axios.post(response_url, payload).then(result => {
-      return res.status(200).end();
-    });
-  } catch (error) {
-    console.log("ERROR:", error);
-    res.status(500).end();
-  }
-};
-
-const getInfo = async (req, res) => {
-  try {
-    let { response_url } = req.body;
-
-    let payload = welcomeMessage();
-
-    axios.post(response_url, payload).then(result => {
-      return res.status(200).end();
-    });
-  } catch (error) {
-    console.log("ERROR: ", error);
-    return res.status(500).end();
-  }
-};
-
 const addBiography = async (req, res) => {
   try {
     const { trigger_id } = req.body;
@@ -115,23 +125,6 @@ const addBiography = async (req, res) => {
   } catch (error) {
     res.status(500).end()
   }
-
-}
-
-
-const getUsers = async (req, res) => {
-  try {
-    let { response_url, user_id, channel_id, text } = req.body;
-    let payload = getUsersMessage({ user_id, channel_id, text });
-
-    axios.post(response_url, payload).then(result => res.status(200).end());
-  } catch (error) {
-    console.log("ERROR:", error);
-    res.status(500).end();
-  }
 };
 
-
-module.exports = {
-  commandHandler
-};
+module.exports = { commandHandler };
