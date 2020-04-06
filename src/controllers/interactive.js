@@ -1,9 +1,9 @@
+require('dotenv').config();
 const axios = require("axios");
+
 const User = require('../models/User');
-const {
-  getUserInfo
-} = require("../helpers/payloads");
-const { postRequestAPI } = require('../helpers/api');
+const { getUserInfo } = require("../helpers/payloads");
+const { postRequestAPI, getRequest } = require('../helpers/api');
 /**
  *
  * Function that is supposed to handles all the interactive messages.
@@ -12,56 +12,95 @@ const { postRequestAPI } = require('../helpers/api');
  */
 const interactiveHandler = async (req, res) => {
   try {
-    // let payload = JSON.parse(req.body.payload);
-
-    // let data = await User.findById(payload.actions[0].selected_user);
-    // let url = payload.response_url;
-
-    // let message = getUserInfo({
-    //   name: data ? `<@${data.id}>` : `<@${payload.actions[0].selected_user}>`,
-    //   text: data ? data.bio : `Got no information about <@${payload.actions[0].selected_user}> yet`,
-    //   imageUrl: data ? data.image : "https://api.slack.com/img/blocks/bkb_template_images/plants.png"
-    // })
-
-    // axios.post(url, message).then(result => {
-    //   return res.status(200).end();
-    // });
     let payload = JSON.parse(req.body.payload);
-    res.status(200).send('');
-    confirm(payload.user.id, payload.view);
+    let { type } = payload;
 
+    switch (type) {
+      case 'view_submission':
+        dialogHandler(req, res);
+        break;
+      case 'block_actions':
+        blockHandler(req, res);
+        break;
+      default:
+    }
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
   }
 };
 
-const confirm = async (userId, view) => {
-  let values = view.state.values;
-  let result = await postRequestAPI('users.info', {
-    user: userId
-  });
+const blockHandler = async (req, res) => {
+  try {
+    let payload = JSON.parse(req.body.payload);
+    let { selected_user } = payload.actions[0];
 
-  console.log(result.user.id);
+    let data = await User.findById(selected_user);
 
-  await sendConfirmation(result.user.id);
+    let name = data ? `<@${data.id}>` : `<@${selected_user}>`
+    let text = data ? data.bio : `Got no information about <@${selected_user}> yet`
+    let imageUrl = data ? data.image : "https://api.slack.com/img/blocks/bkb_template_images/plants.png"
+
+    let message = getUserInfo({ name, text, imageUrl });
+
+    axios.post(payload.response_url, message).then(result => {
+      return res.status(200).end();
+    });
+  } catch (error) {
+    res.status(500).end();
+  }
+
 }
 
-const sendConfirmation = async (ticket) => {
+const dialogHandler = async (req, res) => {
+  try {
+    let { view, user } = JSON.parse(req.body.payload);
+    let { value } = view.state.values.message.bio_input;
+
+    let userInfo = await getRequest(`https://slack.com/api/users.info?token=${process.env.SLACK_BOT_TOKEN}&user=${user.id}&pretty=1`);
+
+    await User.findById(userInfo.data.user.id, (err, doc) => {
+      if (err) {
+        console.log("ERROR: ", err);
+      }
+
+      // if no user..
+      if (!doc) {
+        doc = new User({
+          _id: userInfo.data.user.id,
+          name: user.username,
+          bio: value,
+          image: userInfo.data.user.profile.image_72
+        });
+
+      } else {
+        //updating both profile picture and the biography.
+        doc.image = userInfo.data.user.profile.image_72;
+        doc.bio = value;
+      }
+
+      // Saving user to the database.
+      doc.save().then(result => res.status(200).end()).catch(err => console.log(err));
+    });
+
+    await sendConfirmation(userInfo.data.user.id);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+  }
+}
+
+const sendConfirmation = async (userId) => {
   // open a DM channel for that user
-  let channel = await postRequestAPI('im.open', {
-    user: ticket
-  })
-  console.log(channel);
+  let channel = await postRequestAPI('im.open', { user: userId })
 
   let message = {
     channel: channel.channel.id,
-    text: "testar bara",
+    text: "Din biografi är inlagd"
   }
 
-  let result = await postRequestAPI('chat.postMessage', message);
-  console.log(result);
-};
+  await postRequestAPI('chat.postMessage', message);
 
+};
 
 module.exports = { interactiveHandler };

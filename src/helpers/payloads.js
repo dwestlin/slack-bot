@@ -6,13 +6,13 @@
 
 const getUsersMessage = data => {
   return {
-    username: data.username,
-    channel: data.channel,
+    username: data.user_id,
+    channel: data.channel_id,
     text: data.text,
     blocks: [
       {
         type: "section",
-        block_id: "section678",
+        block_id: "getUserInfo",
         text: {
           type: "mrkdwn",
           text:
@@ -81,8 +81,7 @@ const welcomeMessage = data => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text:
-            "Hallå där 👋 Mitt namn är IBM-boten och min uppgift är att lista användbara kommandon och ge information om våra medarbetare."
+          text: "Hallå där och varmt välkommen till teamet :tada: \n Mitt namn är IBM-boten och min uppgift är att lista användbara kommandon och ge information om våra medarbetare."
         },
         accessory: {
           type: "image",
@@ -121,7 +120,7 @@ const welcomeMessage = data => {
         text: {
           type: "mrkdwn",
           text:
-            "*:four: Använd `/weather <stad>` * Ger dig information om vädret samt temperatur."
+            "*:four: Använd `/weather <Stad>` * Ger dig information om vädret samt temperatur."
         }
       },
       {
@@ -129,7 +128,7 @@ const welcomeMessage = data => {
         text: {
           type: "mrkdwn",
           text:
-            "*:five: Använd `/addinfo <kort information om dig själv>` * För att presentera dig för nya användare."
+            "*:five: Använd `/biography` * För att lägga in en presentation om dig själv."
         }
       },
       {
@@ -159,10 +158,10 @@ const welcomeMessage = data => {
   };
 };
 
-const modal = context => {
+const openModal = context => {
   return {
     trigger_id: context.trigger_id,
-    view: JSON.stringify({
+    view: {
       type: 'modal',
       title: {
         type: 'plain_text',
@@ -181,10 +180,11 @@ const modal = context => {
       },
       blocks: [
         {
+          block_id: "message",
           type: "input",
           element: {
-            type: "plain_text_input",
             action_id: "bio_input",
+            type: "plain_text_input",
             multiline: true,
             placeholder: {
               type: "plain_text",
@@ -197,9 +197,9 @@ const modal = context => {
           }
         }
       ]
-    })
+    }
   }
 
 };
 
-module.exports = { modal, welcomeMessage, getUserInfo, weatherMessage, getUsersMessage };
+module.exports = { openModal, welcomeMessage, getUserInfo, weatherMessage, getUsersMessage };

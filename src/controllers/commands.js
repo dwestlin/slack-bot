@@ -1,13 +1,38 @@
-const {
-  weatherMessage,
-  welcomeMessage,
-  getUsersMessage, modal
-} = require("../helpers/payloads");
-const axios = require("axios");
-let User = require("../models/User");
-const { postRequestAPI } = require('../helpers/api');
 
-const eventsCommand = (req, res) => {
+const axios = require("axios");
+
+const { postRequestAPI, getRequest } = require('../helpers/api');
+const { weatherMessage, welcomeMessage, getUsersMessage, openModal } = require("../helpers/payloads");
+
+
+const commandHandler = (req, res) => {
+  let type = req.params.command;
+
+  switch (type) {
+    case 'events':
+      getEvents(req, res);
+      break;
+    case 'info':
+      getInfo(req, res);
+      break;
+    case 'users':
+      getUsers(req, res);
+      break;
+    case 'jokes':
+      getJoke(req, res);
+      break;
+    case 'weather':
+      getWeather(req, res);
+      break;
+    case 'biography':
+      addBiography(req, res);
+      break;
+    default:
+      console.log("nothing")
+  }
+};
+
+const getEvents = (req, res) => {
   try {
     //TODO Implement event command.
     res.status(200).send("EVENTS");
@@ -16,19 +41,17 @@ const eventsCommand = (req, res) => {
   }
 };
 
-const weatherCommand = async (req, res) => {
+const getWeather = async (req, res) => {
   try {
     let city = req.body.text;
-    let weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.WEATHER_API_KEY}`;
-
-    let weather = await getRequest(weatherUrl);
-    let url = req.body.response_url;
+    let { response_url, user_id, channel_id, } = req.body;
+    let weather = await getRequest(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.WEATHER_API_KEY}`);
 
     // Storing the data to be sent to webhook url.
     let weatherData = weatherMessage({
-      username: req.body.user_id,
-      channel: req.body.channel_id,
-      text: req.body.text,
+      username: user_id,
+      channel: channel_id,
+      text: city,
       name: `${weather.data.name}, ${weather.data.sys.country}`,
       description: weather.data.weather[0].description,
       temp: weather.data.main.temp,
@@ -36,7 +59,7 @@ const weatherCommand = async (req, res) => {
     });
 
     //sending the weatherdata back to slack webhook url.
-    axios.post(url, weatherData).then(result => {
+    axios.post(response_url, weatherData).then(result => {
       return res.status(200).end();
     });
   } catch (error) {
@@ -44,18 +67,18 @@ const weatherCommand = async (req, res) => {
   }
 };
 
-const jokeCommand = async (req, res) => {
+const getJoke = async (req, res) => {
   try {
     let joke = await getRequest("http://api.icndb.com/jokes/random");
-    let url = req.body.response_url;
+    let { response_url, user_id } = req.body;
 
     let payload = {
-      username: req.body.user_id,
+      username: user_id,
       response_type: "in_channel",
       text: `_${joke.data.value.joke}_`
     };
 
-    axios.post(url, payload).then(result => {
+    axios.post(response_url, payload).then(result => {
       return res.status(200).end();
     });
   } catch (error) {
@@ -64,16 +87,13 @@ const jokeCommand = async (req, res) => {
   }
 };
 
-const infoCommand = async (req, res) => {
+const getInfo = async (req, res) => {
   try {
-    let url = req.body.response_url;
+    let { response_url } = req.body;
 
-    let payload = welcomeMessage({
-      username: req.body.user_id,
-      channel: req.body.channel_id
-    });
+    let payload = welcomeMessage();
 
-    axios.post(url, payload).then(result => {
+    axios.post(response_url, payload).then(result => {
       return res.status(200).end();
     });
   } catch (error) {
@@ -82,76 +102,36 @@ const infoCommand = async (req, res) => {
   }
 };
 
-const addInfo = async (req, res) => {
-  const { trigger_id } = req.body;
+const addBiography = async (req, res) => {
+  try {
+    const { trigger_id } = req.body;
 
-  let view = modal({
-    trigger_id
-  })
-  res.status(200).end();
-  let result = await postRequestAPI('views.open', view);
+    let view = openModal({
+      trigger_id
+    })
+
+    await postRequestAPI('views.open', view);
+    res.status(200).end();
+  } catch (error) {
+    res.status(500).end()
+  }
+
 }
 
-const addInfoCommand = async (req, res) => {
+
+const getUsers = async (req, res) => {
   try {
-    if (req.body.text) {
-      let data = await User.findById(req.body.user_id);
+    let { response_url, user_id, channel_id, text } = req.body;
+    let payload = getUsersMessage({ user_id, channel_id, text });
 
-      if (!data) {
-
-        let result = await postRequestAPI('users.info', {
-          user: req.body.user_id
-        });
-
-        let user = new User({
-          _id: req.body.user_id,
-          name: req.body.user_name,
-          bio: req.body.text,
-          image: result.user.profile.image_32
-        });
-
-        return user.save().then(usr => res.status(200).send("Informationen om dig är inlagd"));
-      }
-
-      data.bio = req.body.text;
-      return data.save().then(result => res.status(200).send("Information om dig är uppdaterad")).catch(err => res.status(500).send(err));
-    }
-    return res.status(200).send("Vänligen uppge information om dig, exempelvis: `/addinfo <information`");
-  } catch (error) {
-    console.log(error);
-    res.status(500).end();
-  }
-};
-
-const userCommand = async (req, res) => {
-  try {
-    let url = req.body.response_url;
-
-    let payload = getUsersMessage({
-      username: req.body.user_id,
-      channel: req.body.channel_id,
-      text: req.body.text
-    });
-
-    axios.post(url, payload).then(result => {
-      res.status(200).end();
-    });
+    axios.post(response_url, payload).then(result => res.status(200).end());
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
   }
 };
 
-async function getRequest(url) {
-  return axios.get(url);
-}
 
 module.exports = {
-  userCommand,
-  eventsCommand,
-  weatherCommand,
-  infoCommand,
-  jokeCommand,
-  addInfoCommand,
-  addInfo
+  commandHandler
 };

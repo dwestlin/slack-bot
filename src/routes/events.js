@@ -7,6 +7,6 @@ const { validateRequest, bodyChallenge } = require("../helpers/middlewares");
 // ROUTES that recieves events from Slack's API.
 router
   .post("/messages", bodyChallenge, validateRequest, eventHandler)
-  .post("/interactive", interactiveHandler);
+  .post("/interactive", validateRequest, interactiveHandler);
 
 module.exports = router;
