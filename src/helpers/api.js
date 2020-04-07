@@ -16,8 +16,6 @@ const postRequestAPI = async (method, payload) => {
 
 }
 
-async function getRequest(url, headers, data) {
-  return axios.get(url, headers, data);
-}
+const getRequest = async (url, headers, data) => axios.get(url, headers, data)
 
 module.exports = { postRequestAPI, getRequest }

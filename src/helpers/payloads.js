@@ -199,7 +199,6 @@ const openModal = context => {
       ]
     }
   }
-
 };
 
 module.exports = { openModal, welcomeMessage, getUserInfo, weatherMessage, getUsersMessage };

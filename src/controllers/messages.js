@@ -7,54 +7,22 @@ const { postRequestAPI } = require('../helpers/api');
  *
  */
 
-const sendMessage = async (req, res) => {
-  try {
-    let message = `<@${req.body.event.user}>, skickade ett meddelande :thumbsup:`;
-
-    let result = await postRequestAPI("chat.postEphemeral", {
-      user: req.body.event.user,
-      channel: req.body.event.channel,
-      text: message
-    });
-
-    res.status(200).end();
-  } catch (error) {
-    res.status(500).end();
-  }
+const sendMessage = async (user, channel) => {
+  let text = `<@${user}>, skickade ett meddelande :thumbsup:`;
+  await postRequestAPI("chat.postMessage", { user, channel, text });
 };
 
-const welcomeMessage = async (req, res) => {
-  try {
+const welcomeMessage = async (user) => {
+  let channel = await postRequestAPI('im.open', { user: user.id });
 
-    let channel = await postRequestAPI('im.open', {
-      user: req.body.event.user.id
-    })
+  let message = payloads.welcomeMessage();
+  message.channel = channel.channel.id
 
-    let message = payloads.welcomeMessage({
-      channel: channel.channel.id
-    });
-
-    let result = await postRequestAPI('chat.postMessage', message);
-    res.status(200);
-
-  } catch (error) {
-    console.log("ERROR:", error);
-    res.status(500).end();
-  }
+  await postRequestAPI('chat.postMessage', message);
 };
 
-const appMentionMessage = async (req, res) => {
-  try {
-    let result = await postRequestAPI("chat.postEphemeral", {
-      user: req.body.event.user,
-      channel: req.body.event.channel,
-      text: `Hej <@${req.body.event.user}>, du pingade mig :tada: Skriv /info för mer information om vad jag kan göra.`
-    });
-
-    res.status(200).end();
-  } catch (error) {
-    console.log("ERROR:", error);
-    res.status(500).end();
-  }
+const appMentionMessage = async (user, channel) => {
+  let text = `Hej <@${user}>, du pingade mig :tada: Skriv /info för mer information om vad jag kan göra.`;
+  await postRequestAPI("chat.postEphemeral", { user, channel, text });
 };
 module.exports = { appMentionMessage, sendMessage, welcomeMessage };

@@ -26,8 +26,7 @@ const validateRequest = (req, res, next) => {
       let signature = ["v0", timestamp, body];
 
       let basestring = signature.join(":");
-      const hashCode =
-        "v0=" +
+      const hashCode = "v0=" +
         crypto
           .createHmac("sha256", process.env.SLACK_CLIENT_SIGNING_SECRET)
           .update(basestring)

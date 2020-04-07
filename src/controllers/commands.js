@@ -87,16 +87,16 @@ const getJoke = async (req, res) => {
 };
 
 const getWeather = async (req, res) => {
+  let { response_url, user_id, channel_id, text } = req.body;
+
   try {
-    let city = req.body.text;
-    let { response_url, user_id, channel_id, } = req.body;
-    let weather = await getRequest(`http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.WEATHER_API_KEY}`);
+    let weather = await getRequest(`http://api.openweathermap.org/data/2.5/weather?q=${text}&units=metric&appid=${process.env.WEATHER_API_KEY}`);
 
     // Storing the data to be sent to webhook url.
     let weatherData = weatherMessage({
       username: user_id,
       channel: channel_id,
-      text: city,
+      text,
       name: `${weather.data.name}, ${weather.data.sys.country}`,
       description: weather.data.weather[0].description,
       temp: weather.data.main.temp,
@@ -108,7 +108,7 @@ const getWeather = async (req, res) => {
       return res.status(200).end();
     });
   } catch (error) {
-    return res.status(200).send("City not found");
+    return res.status(200).send(`${text} not found.`);
   }
 };
 
