@@ -10,7 +10,7 @@ const commandHandler = (req, res) => {
   case "events":
     getEvents(req, res);
     break;
-  case "help":
+  case "info":
     getInfo(req, res);
     break;
   case "users":
