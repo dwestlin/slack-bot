@@ -1,7 +1,7 @@
 const axios = require("axios"),
   apiUrl = "https://slack.com/api";
 
-const postRequestAPI = async (method, payload) => {
+const postRequest = async (method, payload) => {
   try {
     let data = Object.assign({ token: process.env.SLACK_BOT_TOKEN }, payload);
     let result = await axios.post(`${apiUrl}/${method}`, data, {
@@ -17,4 +17,4 @@ const postRequestAPI = async (method, payload) => {
 
 const getRequest = async (url, headers, data) => axios.get(url, headers, data);
 
-module.exports = { postRequestAPI, getRequest };
+module.exports = { postRequest, getRequest };

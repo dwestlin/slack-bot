@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const { postRequestAPI, getRequest } = require("../helpers/api");
+const { postRequest, getRequest } = require("./api");
 const { weatherMessage, welcomeMessage, getUsersMessage, openModal } = require("../helpers/payloads");
 
 const commandHandler = (req, res) => {
@@ -36,6 +36,7 @@ const getEvents = (req, res) => {
     res.status(200).send("EVENTS");
   } catch (error) {
     console.log("ERROR:", error);
+    res.status(200).end();
   }
 };
 
@@ -43,7 +44,7 @@ const getInfo = async (req, res) => {
   try {
     let { response_url } = req.body;
 
-    let payload = welcomeMessage();
+    let payload = welcomeMessage({welcomeText: "Mitt namn är IBM-boten och min uppgift är att lista användbara kommandon och ge information om våra medarbetare."});
 
     axios.post(response_url, payload).then(() => res.status(200).end());
   } catch (error) {
@@ -114,7 +115,7 @@ const addBiography = async (req, res) => {
       trigger_id
     });
 
-    await postRequestAPI("views.open", view);
+    await postRequest("views.open", view);
     res.status(200).end();
   } catch (error) {
     res.status(500).end();

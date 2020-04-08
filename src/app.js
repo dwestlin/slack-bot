@@ -1,27 +1,22 @@
-const express = require("express"),
-  morgan = require("morgan"),
-  bodyParser = require("body-parser");
+const express = require("express");
+const morgan = require("morgan");
+const bodyParser = require("body-parser");
 
-const { rawBodySaver, notFound, errorHandler } = require("./helpers/middlewares");
+require("./database/db");
+
+const middlewares = require("./helpers/middlewares");
 const apiRoutes = require("./routes/api");
   
-require("./database/db");
 const app = express();
 
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("tiny"));
-}
+app.use(bodyParser.urlencoded({ verify: middlewares.rawBodySaver, extended: true }));
+app.use(bodyParser.json({ verify: middlewares.rawBodySaver }));
+app.use(morgan("tiny"));
 
-//Using the bodyParsers verify callback to exporting a raw body. You need that to verify the signature comes from SLACK.
-app.use(bodyParser.urlencoded({ verify: rawBodySaver, extended: true }));
-app.use(bodyParser.json({ verify: rawBodySaver }));
-
-// ROUTES
-app.get("/", (req, res) => res.status(200).send("Welcome to the simple slackbot. This is just an API.."));
+app.get("/", (req, res) => res.status(200).send("Slackbot.🌱"));
 app.use("/api", apiRoutes);
 
-// If no routes is used, this middleware kicks in and sends a error message.
-app.use(notFound);
-app.use(errorHandler);
+app.use(middlewares.notFound);
+app.use(middlewares.errorHandler);
 
 module.exports = app;

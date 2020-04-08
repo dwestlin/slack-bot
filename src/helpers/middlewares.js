@@ -19,7 +19,6 @@ const bodyChallenge = (req, res, next) => {
 // Middleware that verifies the request comes from slack.
 const validateRequest = (req, res, next) => {
   try {
-
     if (process.env.SLACK_CLIENT_SIGNING_SECRET && req.rawBody) {
       let timestamp = req.header("X-Slack-Request-Timestamp");
       let body = req.rawBody;

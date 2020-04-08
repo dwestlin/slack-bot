@@ -3,7 +3,7 @@ const axios = require("axios");
 
 const User = require("../models/User");
 const { getUserInfo } = require("../helpers/payloads");
-const { postRequestAPI, getRequest } = require("../helpers/api");
+const { postRequest, getRequest } = require("../controllers/api");
 /**
  *
  * Function that is supposed to handles all the interactive messages.
@@ -90,14 +90,14 @@ const dialogHandler = async (req, res) => {
 
 const sendConfirmation = async (userId) => {
   // open a DM channel for that user
-  let channel = await postRequestAPI("im.open", { user: userId });
+  let channel = await postRequest("im.open", { user: userId });
 
   let message = {
     channel: channel.channel.id,
     text: "Din biografi är inlagd"
   };
 
-  await postRequestAPI("chat.postMessage", message);
+  await postRequest("chat.postMessage", message);
 
 };
 

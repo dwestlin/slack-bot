@@ -1,5 +1,5 @@
 const payloads = require("../helpers/payloads");
-const { postRequestAPI } = require("../helpers/api");
+const { postRequest } = require("./api");
 
 /**
  *
@@ -8,25 +8,27 @@ const { postRequestAPI } = require("../helpers/api");
  */
 
 const sendMessage = async (user) => {
-  let channelData = await postRequestAPI("im.open", { user });
-
-  let message = payloads.welcomeMessage();
+  let channelData = await postRequest("im.open", { user });
+  console.log(channelData);
+  let message = payloads.welcomeMessage({
+    welcomeText: "Mitt namn är IBM-boten och min uppgift är att lista användbara kommandon och ge information om våra medarbetare."
+  });
   message.channel = channelData.channel.id;
 
-  await postRequestAPI("chat.postMessage", message);
+  await postRequest("chat.postMessage", message);
 };
 
 const welcomeMessage = async (user) => {
-  let channel = await postRequestAPI("im.open", { user: user.id });
+  let channel = await postRequest("im.open", { user: user.id });
 
-  let message = payloads.welcomeMessage();
+  let message = payloads.welcomeMessage({welcomeText: "Hallå där och varmt välkommen till teamet :tada: \n Mitt namn är IBM-boten och min uppgift är att lista användbara kommandon och ge information om våra medarbetare."});
   message.channel = channel.channel.id;
 
-  await postRequestAPI("chat.postMessage", message);
+  await postRequest("chat.postMessage", message);
 };
 
 const appMentionMessage = async (user, channel) => {
   let text = `Hej <@${user}>, du pingade mig :tada: Skriv /info för mer information om vad jag kan göra.`;
-  await postRequestAPI("chat.postEphemeral", { user, channel, text });
+  await postRequest("chat.postEphemeral", { user, channel, text });
 };
 module.exports = { appMentionMessage, sendMessage, welcomeMessage };

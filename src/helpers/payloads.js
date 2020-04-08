@@ -74,14 +74,14 @@ const weatherMessage = weather => {
   };
 };
 
-const welcomeMessage = () => {
+const welcomeMessage = data => {
   return {
     blocks: [
       {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "Hallå där och varmt välkommen till teamet :tada: \n Mitt namn är IBM-boten och min uppgift är att lista användbara kommandon och ge information om våra medarbetare."
+          text: data.welcomeText
         },
         accessory: {
           type: "image",

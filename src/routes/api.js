@@ -1,13 +1,8 @@
 const router = require("express").Router();
 
-const oauthRoutes = require("./oauth"),
-  commandRoutes = require("./commands"),
-  eventRoutes = require("./events");
-
-// DECLARING ROUTES
 router
-  .use("/commands", commandRoutes)
-  .use("/events", eventRoutes)
-  .use("/oauth", oauthRoutes);
+  .use("/commands", require("./commands"))
+  .use("/events", require("./events"))
+  .use("/oauth", require("./oauth"));
 
 module.exports = router;
