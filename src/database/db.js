@@ -1,6 +1,5 @@
-const mongoose = require("mongoose");
-
-const server = process.env.DB_SERVER;
+const mongoose = require("mongoose"),
+  server = process.env.DB_SERVER;
 
 class Database {
   constructor() {

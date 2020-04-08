@@ -1,8 +1,8 @@
 const router = require("express").Router();
 
-const oauthRoutes = require("./oauth");
-const commandRoutes = require("./commands");
-const eventRoutes = require("./events");
+const oauthRoutes = require("./oauth"),
+  commandRoutes = require("./commands"),
+  eventRoutes = require("./events");
 
 // DECLARING ROUTES
 router

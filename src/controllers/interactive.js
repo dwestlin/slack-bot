@@ -1,9 +1,9 @@
-require('dotenv').config();
+require("dotenv").config();
 const axios = require("axios");
 
-const User = require('../models/User');
+const User = require("../models/User");
 const { getUserInfo } = require("../helpers/payloads");
-const { postRequestAPI, getRequest } = require('../helpers/api');
+const { postRequestAPI, getRequest } = require("../helpers/api");
 /**
  *
  * Function that is supposed to handles all the interactive messages.
@@ -16,13 +16,13 @@ const interactiveHandler = async (req, res) => {
     let { type } = payload;
 
     switch (type) {
-      case 'view_submission':
-        dialogHandler(req, res);
-        break;
-      case 'block_actions':
-        blockHandler(req, res);
-        break;
-      default:
+    case "view_submission":
+      dialogHandler(req, res);
+      break;
+    case "block_actions":
+      blockHandler(req, res);
+      break;
+    default:
     }
   } catch (error) {
     console.log("ERROR:", error);
@@ -37,20 +37,18 @@ const blockHandler = async (req, res) => {
 
     let data = await User.findById(selected_user);
 
-    let name = data ? `<@${data.id}>` : `<@${selected_user}>`
-    let text = data ? data.bio : `Got no information about <@${selected_user}> yet`
-    let imageUrl = data ? data.image : "https://api.slack.com/img/blocks/bkb_template_images/plants.png"
+    let name = data ? `<@${data.id}>` : `<@${selected_user}>`;
+    let text = data ? data.bio : `Got no information about <@${selected_user}> yet`;
+    let imageUrl = data ? data.image : "https://api.slack.com/img/blocks/bkb_template_images/plants.png";
 
     let message = getUserInfo({ name, text, imageUrl });
 
-    axios.post(payload.response_url, message).then(result => {
-      return res.status(200).end();
-    });
+    axios.post(payload.response_url, message).then(() => res.status(200).end());
   } catch (error) {
     res.status(500).end();
   }
 
-}
+};
 
 const dialogHandler = async (req, res) => {
   try {
@@ -80,7 +78,7 @@ const dialogHandler = async (req, res) => {
       }
 
       // Saving user to the database.
-      doc.save().then(result => res.status(200).end()).catch(err => console.log(err));
+      doc.save().then(() => res.status(200).end()).catch(err => console.log(err));
     });
 
     await sendConfirmation(userInfo.data.user.id);
@@ -88,18 +86,18 @@ const dialogHandler = async (req, res) => {
     console.log(error);
     res.status(500);
   }
-}
+};
 
 const sendConfirmation = async (userId) => {
   // open a DM channel for that user
-  let channel = await postRequestAPI('im.open', { user: userId })
+  let channel = await postRequestAPI("im.open", { user: userId });
 
   let message = {
     channel: channel.channel.id,
     text: "Din biografi är inlagd"
-  }
+  };
 
-  await postRequestAPI('chat.postMessage', message);
+  await postRequestAPI("chat.postMessage", message);
 
 };
 

@@ -1,32 +1,32 @@
 const axios = require("axios");
 
-const { postRequestAPI, getRequest } = require('../helpers/api');
+const { postRequestAPI, getRequest } = require("../helpers/api");
 const { weatherMessage, welcomeMessage, getUsersMessage, openModal } = require("../helpers/payloads");
 
 const commandHandler = (req, res) => {
   let type = req.params.command;
 
   switch (type) {
-    case 'events':
-      getEvents(req, res);
-      break;
-    case 'info':
-      getInfo(req, res);
-      break;
-    case 'users':
-      getUsers(req, res);
-      break;
-    case 'jokes':
-      getJoke(req, res);
-      break;
-    case 'weather':
-      getWeather(req, res);
-      break;
-    case 'biography':
-      addBiography(req, res);
-      break;
-    default:
-      console.log("nothing")
+  case "events":
+    getEvents(req, res);
+    break;
+  case "help":
+    getInfo(req, res);
+    break;
+  case "users":
+    getUsers(req, res);
+    break;
+  case "jokes":
+    getJoke(req, res);
+    break;
+  case "weather":
+    getWeather(req, res);
+    break;
+  case "biography":
+    addBiography(req, res);
+    break;
+  default:
+    console.log("nothing");
   }
 };
 
@@ -45,9 +45,7 @@ const getInfo = async (req, res) => {
 
     let payload = welcomeMessage();
 
-    axios.post(response_url, payload).then(result => {
-      return res.status(200).end();
-    });
+    axios.post(response_url, payload).then(() => res.status(200).end());
   } catch (error) {
     console.log("ERROR: ", error);
     return res.status(500).end();
@@ -59,7 +57,7 @@ const getUsers = async (req, res) => {
     let { response_url, user_id, channel_id, text } = req.body;
     let payload = getUsersMessage({ user_id, channel_id, text });
 
-    axios.post(response_url, payload).then(result => res.status(200).end());
+    axios.post(response_url, payload).then(() => res.status(200).end());
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
@@ -77,9 +75,7 @@ const getJoke = async (req, res) => {
       text: `_${joke.data.value.joke}_`
     };
 
-    axios.post(response_url, payload).then(result => {
-      return res.status(200).end();
-    });
+    axios.post(response_url, payload).then(() => res.status(200).end());
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
@@ -104,9 +100,7 @@ const getWeather = async (req, res) => {
     });
 
     //sending the weatherdata back to slack webhook url.
-    axios.post(response_url, weatherData).then(result => {
-      return res.status(200).end();
-    });
+    axios.post(response_url, weatherData).then(() => res.status(200).end());
   } catch (error) {
     return res.status(200).send(`${text} not found.`);
   }
@@ -118,12 +112,12 @@ const addBiography = async (req, res) => {
 
     let view = openModal({
       trigger_id
-    })
+    });
 
-    await postRequestAPI('views.open', view);
+    await postRequestAPI("views.open", view);
     res.status(200).end();
   } catch (error) {
-    res.status(500).end()
+    res.status(500).end();
   }
 };
 

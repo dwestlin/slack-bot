@@ -1,5 +1,5 @@
 const payloads = require("../helpers/payloads");
-const { postRequestAPI } = require('../helpers/api');
+const { postRequestAPI } = require("../helpers/api");
 
 /**
  *
@@ -7,18 +7,22 @@ const { postRequestAPI } = require('../helpers/api');
  *
  */
 
-const sendMessage = async (user, channel) => {
-  let text = `<@${user}>, skickade ett meddelande :thumbsup:`;
-  await postRequestAPI("chat.postMessage", { user, channel, text });
+const sendMessage = async (user) => {
+  let channelData = await postRequestAPI("im.open", { user });
+
+  let message = payloads.welcomeMessage();
+  message.channel = channelData.channel.id;
+
+  await postRequestAPI("chat.postMessage", message);
 };
 
 const welcomeMessage = async (user) => {
-  let channel = await postRequestAPI('im.open', { user: user.id });
+  let channel = await postRequestAPI("im.open", { user: user.id });
 
   let message = payloads.welcomeMessage();
-  message.channel = channel.channel.id
+  message.channel = channel.channel.id;
 
-  await postRequestAPI('chat.postMessage', message);
+  await postRequestAPI("chat.postMessage", message);
 };
 
 const appMentionMessage = async (user, channel) => {

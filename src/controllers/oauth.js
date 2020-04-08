@@ -1,7 +1,6 @@
-const qs = require("querystring");
-const axios = require("axios");
-
-const url = "https://slack.com/api/oauth.v2.access";
+const qs = require("querystring"),
+  axios = require("axios"),
+  url = "https://slack.com/api/oauth.v2.access";
 
 // redirecting to slack website from /install route.
 const installBot = (req, res) => {
@@ -38,9 +37,7 @@ const authProcess = async (req, res) => {
           .status(302)
           .redirect(`http://${result.data.team.name}.slack.com`);
       })
-      .catch(err => {
-        return res.status(500).end();
-      });
+      .catch(() => res.status(500).end());
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();

@@ -14,7 +14,7 @@ const bodyChallenge = (req, res, next) => {
     res.status(200).send(req.body.challenge);
   }
   next();
-}
+};
 
 // Middleware that verifies the request comes from slack.
 const validateRequest = (req, res, next) => {
@@ -64,13 +64,13 @@ const notFound = (req, res, next) => {
   next(error);
 };
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
 
   const code = res.statusCode !== 200 ? res.statusCode : 500;
   res.status(code);
   res.json({
     message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
+    stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack
   });
 };
 

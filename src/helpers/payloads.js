@@ -74,7 +74,7 @@ const weatherMessage = weather => {
   };
 };
 
-const welcomeMessage = data => {
+const welcomeMessage = () => {
   return {
     blocks: [
       {
@@ -104,7 +104,7 @@ const welcomeMessage = data => {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "*:two: Använd `/info` * Visar denna informationstext igen."
+          text: "*:two: Använd `/info || !help` * Visar denna informationstext igen."
         }
       },
       {
@@ -162,15 +162,15 @@ const openModal = context => {
   return {
     trigger_id: context.trigger_id,
     view: {
-      type: 'modal',
+      type: "modal",
       title: {
-        type: 'plain_text',
-        text: 'IBM'
+        type: "plain_text",
+        text: "IBM"
       },
-      callback_id: 'addinfo',
+      callback_id: "addinfo",
       submit: {
-        type: 'plain_text',
-        text: 'Submit',
+        type: "plain_text",
+        text: "Submit",
         emoji: true
       },
       close: {
@@ -198,7 +198,7 @@ const openModal = context => {
         }
       ]
     }
-  }
+  };
 };
 
 module.exports = { openModal, welcomeMessage, getUserInfo, weatherMessage, getUsersMessage };
