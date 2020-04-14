@@ -13,16 +13,16 @@ const { postRequest, getRequest } = require("../controllers/api");
 const interactiveHandler = async (req, res) => {
   try {
     let payload = JSON.parse(req.body.payload);
-    let { type } = payload;
 
-    switch (type) {
-    case "view_submission":
-      dialogHandler(req, res);
-      break;
-    case "block_actions":
-      blockHandler(req, res);
-      break;
-    default:
+    /*eslint indent: ["error", 2, { "SwitchCase": 1 }]*/
+    switch (payload.type) {
+      case "view_submission":
+        dialogHandler(req, res);
+        break;
+      case "block_actions":
+        blockHandler(req, res);
+        break;
+      default:
     }
   } catch (error) {
     console.log("ERROR:", error);
@@ -37,7 +37,7 @@ const blockHandler = async (req, res) => {
 
     let data = await User.findById(selected_user);
 
-    let name = data ? `<@${data.id}>` : `<@${selected_user}>`;
+    let name = `<@${selected_user}>`;
     let text = data ? data.bio : `Got no information about <@${selected_user}> yet`;
     let imageUrl = data ? data.image : "https://api.slack.com/img/blocks/bkb_template_images/plants.png";
 

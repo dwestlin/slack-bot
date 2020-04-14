@@ -6,6 +6,7 @@ const { weatherMessage, welcomeMessage, getUsersMessage, openModal } = require("
 const commandHandler = (req, res) => {
   let type = req.params.command;
 
+  /*eslint indent: ["error", 2, { "SwitchCase": 1 }]*/
   switch (type) {
     case "events":
       getEvents(req, res);

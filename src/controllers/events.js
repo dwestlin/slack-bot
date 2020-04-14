@@ -8,7 +8,8 @@ const {
 const eventHandler = async (req, res) => {
   try {
     const { user, channel, text, type } = req.body.event;
-    console.log(req.body.event);
+
+    /*eslint indent: ["error", 2, { "SwitchCase": 1 }]*/
     switch (type) {
       case "app_mention":
         appMentionMessage(user, channel);
@@ -30,6 +31,7 @@ const eventHandler = async (req, res) => {
       default:
         return res.status(204).end();
     }
+
   } catch (error) {
     console.log("ERROR:", error);
     res.status(500).end();
