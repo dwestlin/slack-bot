@@ -7,26 +7,26 @@ const commandHandler = (req, res) => {
   let type = req.params.command;
 
   switch (type) {
-  case "events":
-    getEvents(req, res);
-    break;
-  case "info":
-    getInfo(req, res);
-    break;
-  case "users":
-    getUsers(req, res);
-    break;
-  case "jokes":
-    getJoke(req, res);
-    break;
-  case "weather":
-    getWeather(req, res);
-    break;
-  case "biography":
-    addBiography(req, res);
-    break;
-  default:
-    console.log("nothing");
+    case "events":
+      getEvents(req, res);
+      break;
+    case "info":
+      getInfo(req, res);
+      break;
+    case "users":
+      getUsers(req, res);
+      break;
+    case "jokes":
+      getJoke(req, res);
+      break;
+    case "weather":
+      getWeather(req, res);
+      break;
+    case "biography":
+      addBiography(req, res);
+      break;
+    default:
+      console.log("nothing");
   }
 };
 
@@ -44,7 +44,7 @@ const getInfo = async (req, res) => {
   try {
     let { response_url } = req.body;
 
-    let payload = welcomeMessage({welcomeText: "Mitt namn är IBM-boten och min uppgift är att lista användbara kommandon och ge information om våra medarbetare."});
+    let payload = welcomeMessage();
 
     axios.post(response_url, payload).then(() => res.status(200).end());
   } catch (error) {
