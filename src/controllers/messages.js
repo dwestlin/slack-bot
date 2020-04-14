@@ -16,7 +16,7 @@ const sendMessage = async (user) => {
 };
 
 const appMentionMessage = async (user, channel) => {
-  let text = `Hej <@${user}>, du pingade mig :tada: Skriv /info för mer information om vad jag kan göra.`;
+  let text = `Hej <@${user}> :tada: Skriv /info för mer information om vad jag kan göra.`;
   await postRequest("chat.postEphemeral", { user, channel, text });
 };
 

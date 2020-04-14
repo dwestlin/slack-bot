@@ -9,10 +9,11 @@ const rawBodySaver = (req, res, buf, encoding) => {
   }
 };
 
-const bodyChallenge = (req, res) => {
+const bodyChallenge = (req, res, next) => {
   if (req.body.type === "url_verification") {
     return res.status(200).send(req.body.challenge);
   }
+  next();
 };
 
 // Middleware that verifies the request comes from slack.
