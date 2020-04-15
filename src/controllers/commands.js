@@ -3,33 +3,6 @@ const axios = require("axios");
 const { postRequest, getRequest } = require("./api");
 const { weatherMessage, welcomeMessage, getUsersMessage, openModal } = require("../helpers/payloads");
 
-const commandHandler = (req, res) => {
-  let type = req.params.command;
-
-  /*eslint indent: ["error", 2, { "SwitchCase": 1 }]*/
-  switch (type) {
-    case "events":
-      getEvents(req, res);
-      break;
-    case "info":
-      getInfo(req, res);
-      break;
-    case "users":
-      getUsers(req, res);
-      break;
-    case "jokes":
-      getJoke(req, res);
-      break;
-    case "weather":
-      getWeather(req, res);
-      break;
-    case "biography":
-      addBiography(req, res);
-      break;
-    default:
-      console.log("nothing");
-  }
-};
 
 const getEvents = (req, res) => {
   try {
@@ -123,4 +96,4 @@ const addBiography = async (req, res) => {
   }
 };
 
-module.exports = { commandHandler };
+module.exports = { getEvents, getInfo, getUsers, getJoke, getWeather, addBiography };
