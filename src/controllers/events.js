@@ -1,7 +1,7 @@
 const {
   appMentionMessage,
   sendMessage
-} = require("./messages");
+} = require("./api");
 
 
 // Handles the incoming events based on type of message.

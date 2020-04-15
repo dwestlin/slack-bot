@@ -1,5 +1,9 @@
-const axios = require("axios"),
-  apiUrl = "https://slack.com/api";
+const axios = require("axios");
+
+const payloads = require("../helpers/payloads");
+const apiUrl = "https://slack.com/api";
+
+const getRequest = async (url, headers, data) => axios.get(url, headers, data);
 
 const postRequest = async (method, payload) => {
   try {
@@ -15,6 +19,18 @@ const postRequest = async (method, payload) => {
 
 };
 
-const getRequest = async (url, headers, data) => axios.get(url, headers, data);
+const sendMessage = async (user) => {
+  let channel = await postRequest("im.open", { user });
 
-module.exports = { postRequest, getRequest };
+  let message = payloads.welcomeMessage();
+  message.channel = channel.channel.id;
+
+  await postRequest("chat.postMessage", message);
+};
+
+const appMentionMessage = async (user, channel) => {
+  let text = `Hej <@${user}> :tada: Skriv /info för mer information om vad jag kan göra.`;
+  await postRequest("chat.postEphemeral", { user, channel, text });
+};
+
+module.exports = { appMentionMessage, sendMessage, postRequest, getRequest };
