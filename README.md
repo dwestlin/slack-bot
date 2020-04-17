@@ -92,6 +92,7 @@ The bot has the following features:
 1. Set the following environment variables to `.env` (see `.env.sample`):
     * `SLACK_BOT_TOKEN`: Your bot token, `xoxb-` (available on the **OAuth & Permissions** once you install the app)
     * `SLACK_CLIENT_SIGNING_SECRET`: Your app's Signing Secret (available on the **Basic Information** page)
+    * `WEATHER_API_KEY`: Get your token at https://openweathermap.org/api
 2. If you're running the app locally, run the app (`npm start`).
 
 
