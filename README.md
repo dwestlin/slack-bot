@@ -26,6 +26,7 @@ The bot has the following features:
 1. Create an app at [https://api.slack.com/apps](https://api.slack.com/apps)
 2. Add a Slash command (See *Add a Slash Command* section below)
 3. Enable Interactive components (See *Enable Interactive Components* below)
+3. Subscribe to bot events (See *Subscribe to bot events* below)
 4. Navigate to the **OAuth & Permissions** page and select the following bot token scopes:
     * `app_mentions:read`
     * `channels:join`
@@ -67,7 +68,7 @@ The bot has the following features:
     * Command: `/biography`
     * Request URL: Your server URL + `/api/commands/biography`
 
-### Subscribe to bot events
+#### Subscribe to bot events
 1. Go to the app settings and click on Event Subscriptions.
 1. Set the Request URL to your server URL (*e.g.* `https://yourURL.com`) + `/api/events/messages`. 
 3. Click the "Add Bot User Event" and fill in the following:
