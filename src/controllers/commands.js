@@ -3,7 +3,6 @@ const axios = require("axios");
 const { postRequest, getRequest } = require("./api");
 const { weatherMessage, welcomeMessage, getUsersMessage, openModal } = require("../helpers/payloads");
 
-
 const getEvents = (req, res) => {
   try {
     //TODO Implement event command.
