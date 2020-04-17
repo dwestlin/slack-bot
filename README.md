@@ -2,7 +2,7 @@
 
 ![imb logo](https://i.ya-webdesign.com/images/ibm-logo-white-png-18.png)
 
-This repository contains a project for a bot in the IBM **Slack** forum. The bot will have a number of functions and features listed below.
+This repository contains a project for a bot in the IBM **Slack** forum. The bot contains multiple functions and features listed below.
 
 ![info-gif](https://media.giphy.com/media/VJkvx9oeiYnpB0p50L/giphy.gif)
 
