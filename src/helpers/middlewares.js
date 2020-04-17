@@ -1,5 +1,6 @@
 require("dotenv").config();
 const crypto = require("crypto");
+const timingSafeCompare = require('tsscmp');
 
 // Callback function that exports  a parsed rawBody into the request.
 // This function is needed in order to verify requests from Slack's API.
@@ -16,44 +17,32 @@ const bodyChallenge = (req, res, next) => {
   next();
 };
 
-// Middleware that verifies the request comes from slack.
 const validateRequest = (req, res, next) => {
   try {
-    if (process.env.SLACK_CLIENT_SIGNING_SECRET && req.rawBody) {
-      let timestamp = req.header("X-Slack-Request-Timestamp");
-      let body = req.rawBody;
-      let signature = ["v0", timestamp, body];
+    const signature = req.header("X-Slack-Signature");
+    const timestamp = req.header("X-Slack-Request-Timestamp");
+    const hmac = crypto.createHmac('sha256', process.env.SLACK_CLIENT_SIGNING_SECRET);
+    const [version, hash] = signature.split('=');
 
-      let basestring = signature.join(":");
-      const hashCode = "v0=" +
-        crypto
-          .createHmac("sha256", process.env.SLACK_CLIENT_SIGNING_SECRET)
-          .update(basestring)
-          .digest("hex");
-      let recievedSignature = req.header("X-Slack-Signature");
+    // Check if the timestamp is too old
+    const fiveMinutesAgo = ~~(Date.now() / 1000) - (60 * 5);
+    if (timestamp < fiveMinutesAgo) return res.status(404).end();
 
-      // Compare the hash of the computed signature with the retrieved signature with a secure hmac compare function
-      const validSignature = () => {
-        const slackBuffer = Buffer.from(recievedSignature);
-        const compBuffer = Buffer.from(hashCode);
-        return crypto.timingSafeEqual(slackBuffer, compBuffer);
-      };
-      // replace direct compare with the hmac result
-      if (!validSignature()) {
-        return res.status(401).end();
-      }
-      next();
-    } else {
+    hmac.update(`${version}:${timestamp}:${req.rawBody}`);
+
+    // check that the request signature matches expected value
+    if (!timingSafeCompare(hmac.digest('hex'), hash)) {
       return res.status(401).end();
     }
+    next();
   } catch (error) {
-    res.status(401).json({
+    return res.status(401).json({
       status: "Failed",
       message: "You don't have authorization to request that url."
     });
-    return false;
   }
 };
+
 
 const notFound = (req, res, next) => {
   res.status(404);
