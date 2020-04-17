@@ -4,6 +4,8 @@
 
 This repository contains a project for a bot in the IBM **Slack** forum. The bot will have a number of functions and features listed below.
 
+![info-gif](https://media.giphy.com/media/VJkvx9oeiYnpB0p50L/giphy.gif)
+
 ## Features
 
 The bot has the following features:
@@ -15,8 +17,6 @@ The bot has the following features:
 - [x] Listens to messages adressed to the bot.
 - [x] Able to add brief information about all employees (eg by typing `/biography`)
 - [x] Storing bio info in database.
-
----
 
 
 ## Setup
