@@ -10,13 +10,13 @@ This repository contains a project for a bot in the IBM **Slack** forum. The bot
 
 The bot has the following features:
 
-- * Sends welcome message to everyone joining the workspace.
-- * Lists all users in workspace
-- * Get current weather in the specified city.
-- * Tells random jokes.
-- * Listens to messages adressed to the bot.
-- * Able to add brief information about all employees (eg by typing `/biography`)
-- * Storing bio info in database.
+- Sends welcome message to everyone joining the workspace.
+- Lists all users in workspace
+- Get current weather in the specified city.
+- Tells random jokes.
+- Listens to messages adressed to the bot.
+- Able to add brief information about all employees (eg by typing `/biography`)
+- Storing bio info in database.
 
 
 ## Setup
