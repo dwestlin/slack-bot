@@ -106,4 +106,7 @@ The bot has the following features:
     * `SLACK_BOT_TOKEN`: Your bot token, `xoxb-` (available on the **OAuth & Permissions** once you install the app)
     * `SLACK_CLIENT_SIGNING_SECRET`: Your app's Signing Secret (available on the **Basic Information** page)
 3. If you're running the app locally, run the app (`npm start`).
+4. If you want to run the app as microservice, just follow these steps:
+   * `docker build -t slack-bot .`
+   * `docker run -p <internal port>:<external port> -d slack-bot` 
 
