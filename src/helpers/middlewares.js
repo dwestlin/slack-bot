@@ -44,7 +44,7 @@ const validateRequest = (req, res, next) => {
       }
       next();
     } else {
-      res.status(401).end();
+      return res.status(401).end();
     }
   } catch (error) {
     res.status(401).json({

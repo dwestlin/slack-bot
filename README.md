@@ -13,34 +13,95 @@ The bot has the following features:
 - [x] Get current weather in the specified city.
 - [x] Tells random jokes.
 - [x] Listens to messages adressed to the bot.
-- [x] Able to add brief information about all employees (eg by typing `/addinfo "hello my name is John/Jane Doe"`)
-- [x] Storing above info in mongodb-database.
-
-## Requirements
-
-The bot should also be able to handle following events.
-- [ ] The bot should send a message every Thursday reminding about the coffee meeting.
-- [ ] Host the bot (where? should it be containerized?). At this point it's hosted in Dockerfile at a raspberry pi.
+- [x] Able to add brief information about all employees (eg by typing `/biography`)
+- [x] Storing bio info in database.
 
 ---
 
-## Prerequisites
 
-Create a bot user at https://api.slack.com/
+## Setup
 
-## Installation
+### Create a Slack app
+
+1. Create an app at [https://api.slack.com/apps](https://api.slack.com/apps)
+2. Add a Slash command (See *Add a Slash Command* section below)
+3. Enable Interactive components (See *Enable Interactive Components* below)
+4. Navigate to the **OAuth & Permissions** page and select the following bot token scopes:
+    * `app_mentions:read`
+    * `channels:join`
+    * `channels:manage`
+    * `channels:read`
+    * `channels:history`
+    * `chat:write`
+    * `chat:write:customize`
+    * `chat:write:public`
+    * `commands`
+    * `groups:history`
+    * `groups:read`
+    * `im:history`
+    * `im:read`
+    * `im:write`
+    * `incoming-webhook`
+    * `links:write`
+    * `mpim:history`
+    * `mpim:write`
+    * `reactions:read`
+    * `reactions:write`
+    * `users.profile:read`
+    * `users:read`
+    * `users:read.email`
+    
+5. Click 'Save Changes' and install the app (You should get an OAuth access token after the installation)
+
+#### Add a Slash Command
+1. Go to the app settings and click on Slash Commands.
+1. Click the 'Create New Command' button and fill in the following:
+    * Command: `/info`
+    * Request URL: Your server URL + `/api/commands/info`
+    * Command: `/weather`
+    * Request URL: Your server URL + `/api/commands/weather`
+    * Command: `/jokes`
+    * Request URL: Your server URL + `/api/commands/jokes`
+    * Command: `/users`
+    * Request URL: Your server URL + `/api/commands/users`
+    * Command: `/biography`
+    * Request URL: Your server URL + `/api/commands/biography`
+
+### Subscribe to bot events
+1. Go to the app settings and click on Event Subscriptions.
+1. Set the Request URL to your server URL (*e.g.* `https://yourURL.com`) + `/api/events/messages`. 
+3. Click the "Add Bot User Event" and fill in the following:
+    * app_mention
+    * im_created
+    * member_joined_channel
+    * message.channels
+    * message.groups
+    * message.im
+    * team_join
+
+
+#### Enable Interactive Components
+1. Go back to the app settings and click on Interactive Components.
+1. Set the Request URL to your server URL (*e.g.* `https://yourURL.com`) + `/api/events/interactive`.
+1. Save the change.
+
+
+### Set Your Credentials
+
+1. Set the following environment variables to `.env` (see `.env.sample`):
+    * `SLACK_BOT_TOKEN`: Your bot token, `xoxb-` (available on the **OAuth & Permissions** once you install the app)
+    * `SLACK_CLIENT_SIGNING_SECRET`: Your app's Signing Secret (available on the **Basic Information** page)
+2. If you're running the app locally, run the app (`npm start`).
+
+
+#### Run the app 
 
 [Node.js](http://nodejs.org/) is required.
 
-```shell
-$ git clone https://github.com/dwestlin/slack-bot.git
-$ cd slack-bot
-$ npm install
-$ create .env file based on the .env.sample credentials.
-```
+1. Get the code
+    * Clone this repo https://github.com/dwestlin/slack-bot.git and run `npm install`
+2. Set the following environment variables to `.env` (see `.env.sample`):
+    * `SLACK_BOT_TOKEN`: Your bot token, `xoxb-` (available on the **OAuth & Permissions** once you install the app)
+    * `SLACK_CLIENT_SIGNING_SECRET`: Your app's Signing Secret (available on the **Basic Information** page)
+3. If you're running the app locally, run the app (`npm start`).
 
-## Run
-
-```shell
-$ npm start
-```
