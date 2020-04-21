@@ -70,7 +70,7 @@ The bot has the following features:
 
 #### Subscribe to bot events
 1. Go to the app settings and click on Event Subscriptions.
-1. Set the Request URL to your server URL (*e.g.* `https://yourURL.com`) + `/api/events/messages`. 
+1. Set the Request URL to your server URL (*e.g.* `https://yourURL.com`) + `/api/events/events`. 
 3. Click the "Add Bot User Event" and fill in the following:
     * app_mention
     * im_created
