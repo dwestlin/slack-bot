@@ -35,7 +35,7 @@ const blockHandler = async (req, res) => {
     let payload = JSON.parse(req.body.payload);
     let { selected_user } = payload.actions[0];
 
-    let data = await User.findById(selected_user);
+    let data = await getUser(selected_user);
 
     let name = `<@${selected_user}>`;
     let text = data ? data.bio : `Got no information about <@${selected_user}> yet`;
@@ -100,5 +100,15 @@ const sendConfirmation = async (userId) => {
   await postRequest("chat.postMessage", message);
 
 };
+
+const getUser = async (userId) => {
+  try {
+    let data = User.findById(userId);
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = { interactiveHandler };
